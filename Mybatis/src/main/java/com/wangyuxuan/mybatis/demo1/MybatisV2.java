@@ -2,15 +2,20 @@ package com.wangyuxuan.mybatis.demo1;
 
 import com.wangyuxuan.mybatis.demo1.framework.config.Configuration;
 import com.wangyuxuan.mybatis.demo1.framework.config.MappedStatement;
+import com.wangyuxuan.mybatis.demo1.framework.sqlnode.IfSqlNode;
+import com.wangyuxuan.mybatis.demo1.framework.sqlnode.MixedSqlNode;
+import com.wangyuxuan.mybatis.demo1.framework.sqlnode.StaticTextSqlNode;
+import com.wangyuxuan.mybatis.demo1.framework.sqlnode.TextSqlNode;
+import com.wangyuxuan.mybatis.demo1.framework.sqlnode.iface.SqlNode;
 import com.wangyuxuan.mybatis.demo1.framework.sqlsource.BoundSql;
+import com.wangyuxuan.mybatis.demo1.framework.sqlsource.DynamicSqlSource;
 import com.wangyuxuan.mybatis.demo1.framework.sqlsource.ParameterMapping;
+import com.wangyuxuan.mybatis.demo1.framework.sqlsource.RawSqlSource;
 import com.wangyuxuan.mybatis.demo1.framework.sqlsource.iface.SqlSource;
 import com.wangyuxuan.mybatis.demo1.po.User;
 import com.wangyuxuan.mybatis.demo1.utils.SimpleTypeRegistry;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
+import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 import org.junit.Test;
 
@@ -30,14 +35,16 @@ public class MybatisV2 {
     private Configuration configuration = new Configuration();
 
     private String namespace;
+    // 如果包含${}或者动态标签，那么isDynamic为true
+    private boolean isDynamic = false;
 
     @Test
     public void test() {
         loadConfiguration();
         Map<String, Object> param = new HashMap<>();
         param.put("username", "wangyuxuan");
-        param.put("sex", 1);
-        List<User> users = selectList("queryUserById", param);
+        param.put("id", 1);
+        List<User> users = selectList("test.findUserById", param);
         System.out.println(users);
     }
 
@@ -54,7 +61,6 @@ public class MybatisV2 {
             // 再获取MappedStatement中的SqlSource
             SqlSource sqlSource = mappedStatement.getSqlSource();
             // 通过SqlSource的API处理，获取BoundSql
-            // TODO 还没有处理
             BoundSql boundSql = sqlSource.getBoundSql(param);
             // 通过BoundSql获取到SQL语句
             String sql = boundSql.getSql();
@@ -219,7 +225,70 @@ public class MybatisV2 {
     }
 
     private SqlSource createSqlSource(Element selectElement) {
-        return null;
+        SqlSource sqlSource = parseScriptNode(selectElement);
+        return sqlSource;
+    }
+
+    /**
+     * 处理select等标签下的SQL脚本
+     *
+     * @param selectElement
+     * @return
+     */
+    private SqlSource parseScriptNode(Element selectElement) {
+        // 解析SQL脚本信息
+        MixedSqlNode rootSqlNode = parseDynamicTags(selectElement);
+        // 将sql脚本信息需要封装SqlSource对象
+        SqlSource sqlSource = null;
+        // 封装成哪个SqlSource 解析过程中确定类型 因此采用全局变量
+        if (isDynamic) {
+            sqlSource = new DynamicSqlSource(rootSqlNode);
+        } else {
+            sqlSource = new RawSqlSource(rootSqlNode);
+        }
+        return sqlSource;
+    }
+
+    private MixedSqlNode parseDynamicTags(Element selectElement) {
+        List<SqlNode> sqlNodes = new ArrayList<>();
+        // 获取select标签的子节点总数
+        int nodeCount = selectElement.nodeCount();
+        // 遍历所有子节点
+        for (int i = 0; i < nodeCount; i++) {
+            Node node = selectElement.node(i);
+            // 判断子节点是文本节点还是元素节点
+            if (node instanceof Text) {
+                // 获取文本信息
+                String sqlText = node.getText();
+                if (sqlText == null || "".equals(sqlText)) {
+                    continue;
+                }
+                // 将sql文本封装到TextSqlNode
+                TextSqlNode textSqlNode = new TextSqlNode(sqlText);
+                // 如果包含${}
+                if (textSqlNode.isDynamic()) {
+                    sqlNodes.add(textSqlNode);
+                    isDynamic = true;
+                } else {
+                    sqlNodes.add(new StaticTextSqlNode(sqlText));
+                }
+            } else if (node instanceof Element) {
+                Element element = (Element) node;
+                String elementName = element.getName();
+                if (elementName.equals("if")) {
+                    String test = element.attributeValue("test");
+                    // 递归封装SqlNode数据
+                    MixedSqlNode mixedSqlNode = parseDynamicTags(element);
+                    // 封装IfSqlNode数据
+                    IfSqlNode ifSqlNode = new IfSqlNode(test, mixedSqlNode);
+                    sqlNodes.add(ifSqlNode);
+                } else if (elementName.equals("where")) {
+                    // ...
+                }
+                isDynamic = true;
+            }
+        }
+        return new MixedSqlNode(sqlNodes);
     }
 
     private Class<?> resolveType(String type) {

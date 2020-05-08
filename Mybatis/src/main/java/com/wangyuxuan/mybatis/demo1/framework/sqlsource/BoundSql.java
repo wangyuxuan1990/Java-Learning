@@ -17,6 +17,11 @@ public class BoundSql {
     // 占位符?对应的参数信息（参数名称、参数类型）
     private List<ParameterMapping> parameterMappings = new ArrayList<>();
 
+    public BoundSql(String sql, List<ParameterMapping> parameterMappings) {
+        this.sql = sql;
+        this.parameterMappings = parameterMappings;
+    }
+
     public String getSql() {
         return sql;
     }
