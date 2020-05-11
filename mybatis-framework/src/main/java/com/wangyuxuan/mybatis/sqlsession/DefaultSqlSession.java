@@ -1,6 +1,7 @@
 package com.wangyuxuan.mybatis.sqlsession;
 
 import com.wangyuxuan.mybatis.config.Configuration;
+import com.wangyuxuan.mybatis.executor.iface.Executor;
 
 import java.util.List;
 
@@ -19,11 +20,17 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T selectOne(String statementId, Object param) {
+        List<Object> list = selectList(statementId, param);
+        if (list != null && list.size() == 1) {
+            return (T) list.get(0);
+        }
         return null;
     }
 
     @Override
     public <T> List<T> selectList(String statementId, Object param) {
-        return null;
+        // CachingExecutor--委托模式-->BaseExecutor--抽象模板方法模式-->SimpleExecutor
+        Executor executor = configuration.newExecutor();
+        return (List<T>) executor.query(statementId, param, configuration);
     }
 }

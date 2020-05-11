@@ -5,6 +5,7 @@ import com.wangyuxuan.mybatis.demo1.po.User;
 import com.wangyuxuan.mybatis.factory.SqlSessionFactory;
 import com.wangyuxuan.mybatis.io.Resources;
 import com.wangyuxuan.mybatis.sqlsession.SqlSession;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -21,11 +22,15 @@ public class MybatisV3 {
 
     private SqlSessionFactory sqlSessionFactory;
 
-    @Test
-    public void test() {
+    @Before
+    public void before() {
         String location = "mybatis-config.xml";
         InputStream inputStream = Resources.getResourceAsStream(location);
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    }
+
+    @Test
+    public void test() {
         Map<String, Object> param = new HashMap<>();
         param.put("username", "wangyuxuan");
         param.put("id", 1);

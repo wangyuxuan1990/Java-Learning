@@ -1,11 +1,10 @@
 package com.wangyuxuan.mybatis.sqlsource;
 
 
+import com.wangyuxuan.mybatis.parser.SqlSourceParser;
 import com.wangyuxuan.mybatis.sqlnode.DynamicContext;
 import com.wangyuxuan.mybatis.sqlnode.MixedSqlNode;
 import com.wangyuxuan.mybatis.sqlsource.iface.SqlSource;
-import com.wangyuxuan.mybatis.utils.GenericTokenParser;
-import com.wangyuxuan.mybatis.utils.ParameterMappingTokenHandler;
 
 /**
  * @author wangyuxuan
@@ -29,13 +28,8 @@ public class DynamicSqlSource implements SqlSource {
         rootSqlNode.apply(context);
         System.out.println("解析#{}之前的SQL语句：" + context.getSql());
         // 针对#{}进行处理
-        // 主要来处理#{}中的参数名称，从入参对象中获取对应的参数值
-        ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler();
-        // 根据#{ 和 }去截取字符串，最终匹配到的#{}中的内容，交给TokenHandler去处理
-        GenericTokenParser tokenParser = new GenericTokenParser("#{", "}", handler);
-        // 执行解析过程，返回值是处理完#{}之后的值
-        String sql = tokenParser.parse(context.getSql());
-        System.out.println("解析#{}之前的SQL语句：" + sql);
-        return new BoundSql(sql, handler.getParameterMappings());
+        SqlSourceParser sqlSourceParser = new SqlSourceParser();
+        SqlSource sqlSource = sqlSourceParser.parse(context.getSql());
+        return sqlSource.getBoundSql(param);
     }
 }

@@ -1,11 +1,10 @@
 package com.wangyuxuan.mybatis.sqlsource;
 
 
+import com.wangyuxuan.mybatis.parser.SqlSourceParser;
 import com.wangyuxuan.mybatis.sqlnode.DynamicContext;
 import com.wangyuxuan.mybatis.sqlnode.MixedSqlNode;
 import com.wangyuxuan.mybatis.sqlsource.iface.SqlSource;
-import com.wangyuxuan.mybatis.utils.GenericTokenParser;
-import com.wangyuxuan.mybatis.utils.ParameterMappingTokenHandler;
 
 /**
  * @author wangyuxuan
@@ -16,20 +15,15 @@ import com.wangyuxuan.mybatis.utils.ParameterMappingTokenHandler;
  */
 public class RawSqlSource implements SqlSource {
 
-    private StaticSqlSource sqlSource;
+    private SqlSource sqlSource;
 
     public RawSqlSource(MixedSqlNode rootSqlNode) {
         DynamicContext context = new DynamicContext(null);
         // 在此处解析 SqlNode集合，合并成一条SQL语句（可能还带有#{}，但是已经处理了${}和动态标签）
         rootSqlNode.apply(context);
         // 针对#{}进行处理
-        // 主要来处理#{}中的参数名称，从入参对象中获取对应的参数值
-        ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler();
-        // 根据#{ 和 }去截取字符串，最终匹配到的#{}中的内容，交给TokenHandler去处理
-        GenericTokenParser tokenParser = new GenericTokenParser("#{", "}", handler);
-        // 执行解析过程，返回值是处理完#{}之后的值
-        String sql = tokenParser.parse(context.getSql());
-        sqlSource =  new StaticSqlSource(sql, handler.getParameterMappings());
+        SqlSourceParser sqlSourceParser = new SqlSourceParser();
+        sqlSource = sqlSourceParser.parse(context.getSql());
     }
 
     @Override
