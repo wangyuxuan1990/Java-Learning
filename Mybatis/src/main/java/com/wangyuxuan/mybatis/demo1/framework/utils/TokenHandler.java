@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wangyuxuan.mybatis.demo1.utils;
+package com.wangyuxuan.mybatis.demo1.framework.utils;
 
 /**
  * @author Clinton Begin

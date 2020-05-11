@@ -1,4 +1,4 @@
-package com.wangyuxuan.mybatis.demo1.utils;
+package com.wangyuxuan.mybatis.utils;
 
 import ognl.Ognl;
 import ognl.OgnlContext;

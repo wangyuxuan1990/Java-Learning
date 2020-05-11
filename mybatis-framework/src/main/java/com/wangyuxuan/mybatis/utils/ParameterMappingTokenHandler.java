@@ -1,6 +1,8 @@
-package com.wangyuxuan.mybatis.demo1.utils;
+package com.wangyuxuan.mybatis.utils;
 
-import com.wangyuxuan.mybatis.demo1.framework.sqlsource.ParameterMapping;
+
+
+import com.wangyuxuan.mybatis.sqlsource.ParameterMapping;
 
 import java.util.ArrayList;
 import java.util.List;

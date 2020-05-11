@@ -1,4 +1,4 @@
-package com.wangyuxuan.mybatis.demo1;
+package com.wangyuxuan.mybatis.demo1.test;
 
 import org.junit.Test;
 

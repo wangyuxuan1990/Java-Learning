@@ -1,4 +1,4 @@
-package com.wangyuxuan.mybatis.demo1.utils;
+package com.wangyuxuan.mybatis.demo1.framework.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

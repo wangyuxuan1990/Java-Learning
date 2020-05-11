@@ -1,10 +1,11 @@
-package com.wangyuxuan.mybatis.demo1.framework.sqlsource;
+package com.wangyuxuan.mybatis.sqlsource;
 
-import com.wangyuxuan.mybatis.demo1.framework.sqlnode.MixedSqlNode;
-import com.wangyuxuan.mybatis.demo1.framework.sqlnode.support.DynamicContext;
-import com.wangyuxuan.mybatis.demo1.framework.sqlsource.iface.SqlSource;
-import com.wangyuxuan.mybatis.demo1.framework.utils.GenericTokenParser;
-import com.wangyuxuan.mybatis.demo1.framework.utils.ParameterMappingTokenHandler;
+
+import com.wangyuxuan.mybatis.sqlnode.DynamicContext;
+import com.wangyuxuan.mybatis.sqlnode.MixedSqlNode;
+import com.wangyuxuan.mybatis.sqlsource.iface.SqlSource;
+import com.wangyuxuan.mybatis.utils.GenericTokenParser;
+import com.wangyuxuan.mybatis.utils.ParameterMappingTokenHandler;
 
 /**
  * @author wangyuxuan

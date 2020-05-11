@@ -1,4 +1,4 @@
-package com.wangyuxuan.mybatis.demo1;
+package com.wangyuxuan.mybatis.demo1.test;
 
 import com.wangyuxuan.mybatis.demo1.po.User;
 import ognl.Ognl;

@@ -1,8 +1,8 @@
-package com.wangyuxuan.mybatis.demo1.framework.sqlnode;
+package com.wangyuxuan.mybatis.sqlnode;
 
-import com.wangyuxuan.mybatis.demo1.framework.sqlnode.iface.SqlNode;
-import com.wangyuxuan.mybatis.demo1.framework.sqlnode.support.DynamicContext;
-import com.wangyuxuan.mybatis.demo1.framework.utils.OgnlUtils;
+
+import com.wangyuxuan.mybatis.sqlnode.iface.SqlNode;
+import com.wangyuxuan.mybatis.utils.OgnlUtils;
 
 /**
  * @author wangyuxuan

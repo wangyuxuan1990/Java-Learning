@@ -1,7 +1,7 @@
-package com.wangyuxuan.mybatis.demo1;
+package com.wangyuxuan.mybatis.demo1.test;
 
 import com.wangyuxuan.mybatis.demo1.po.User;
-import com.wangyuxuan.mybatis.demo1.utils.SimpleTypeRegistry;
+import com.wangyuxuan.mybatis.demo1.framework.utils.SimpleTypeRegistry;
 import org.junit.Test;
 
 import java.io.IOException;

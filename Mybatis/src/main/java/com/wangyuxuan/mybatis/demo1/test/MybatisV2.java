@@ -1,4 +1,4 @@
-package com.wangyuxuan.mybatis.demo1;
+package com.wangyuxuan.mybatis.demo1.test;
 
 import com.wangyuxuan.mybatis.demo1.framework.config.Configuration;
 import com.wangyuxuan.mybatis.demo1.framework.config.MappedStatement;
@@ -13,7 +13,7 @@ import com.wangyuxuan.mybatis.demo1.framework.sqlsource.ParameterMapping;
 import com.wangyuxuan.mybatis.demo1.framework.sqlsource.RawSqlSource;
 import com.wangyuxuan.mybatis.demo1.framework.sqlsource.iface.SqlSource;
 import com.wangyuxuan.mybatis.demo1.po.User;
-import com.wangyuxuan.mybatis.demo1.utils.SimpleTypeRegistry;
+import com.wangyuxuan.mybatis.demo1.framework.utils.SimpleTypeRegistry;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
