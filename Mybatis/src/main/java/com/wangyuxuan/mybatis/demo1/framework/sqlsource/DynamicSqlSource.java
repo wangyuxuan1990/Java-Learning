@@ -34,7 +34,7 @@ public class DynamicSqlSource implements SqlSource {
         GenericTokenParser tokenParser = new GenericTokenParser("#{", "}", handler);
         // 执行解析过程，返回值是处理完#{}之后的值
         String sql = tokenParser.parse(context.getSql());
-        System.out.println("解析#{}之前的SQL语句：" + sql);
+        System.out.println("解析#{}之后的SQL语句：" + sql);
         return new BoundSql(sql, handler.getParameterMappings());
     }
 }
