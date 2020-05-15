@@ -11,6 +11,7 @@
     <modules>
         <module>Mybatis</module>
         <module>mybatis-framework</module>
+        <module>Spring</module>
     </modules>
 
 
