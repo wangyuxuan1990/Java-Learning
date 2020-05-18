@@ -12,6 +12,7 @@
         <module>Mybatis</module>
         <module>mybatis-framework</module>
         <module>Spring</module>
+        <module>spring-framework</module>
     </modules>
 
 
