@@ -31,7 +31,7 @@ public class SpringV2 {
     /**
      * 存储Bean实例（单例Bean） K：beanName V：Bean实例
      */
-    private Map<String, Object> singeltonObjects = new HashMap<>();
+    private Map<String, Object> singletonObjects = new HashMap<>();
     /**
      * 存储Bean实例（单例Bean） K：beanName V：BeanDefinition实例
      */
@@ -222,7 +222,7 @@ public class SpringV2 {
      */
     private Object getBean(String beanName) {
         // 先根据beanName去singletonObjects查询
-        Object bean = singeltonObjects.get(beanName);
+        Object bean = singletonObjects.get(beanName);
         // 如果有结果，则直接返回该实例
         if (bean != null) {
             return bean;
@@ -237,7 +237,7 @@ public class SpringV2 {
         // 如果是单例方式创建实例，则需要将创建后的Bean存储到singletonObjects
         if (bd.isSingleton()) {
             bean = createBean(bd);
-            singeltonObjects.put(beanName, bean);
+            singletonObjects.put(beanName, bean);
         } else if (bd.isPrototype()) {
             // 如果是多例方式创建实例，则不需要将创建后的Bean存储到singletonObjects
             bean = createBean(bd);
