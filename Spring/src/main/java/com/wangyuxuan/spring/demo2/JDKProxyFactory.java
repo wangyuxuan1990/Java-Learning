@@ -1,9 +1,6 @@
 package com.wangyuxuan.spring.demo2;
 
 
-import com.wangyuxuan.spring.demo2.service.UserService;
-import com.wangyuxuan.spring.demo2.service.UserServiceImpl;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -50,10 +47,10 @@ public class JDKProxyFactory implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Method method1 = target.getClass().getMethod("saveUser", null);
-//        Method method2 = Class.forName("com.sun.proxy.$Proxy4").getMethod("saveUser", null);
+        Method method1 = target.getClass().getMethod(method.getName(), null);
+        Method method2 = Class.forName("com.sun.proxy.$Proxy4").getMethod(method.getName(), null);
         System.out.println("目标对象的方法：" + method1.toString());
-//        System.out.println("代理对象的方法：" + method2.toString());
+        System.out.println("代理对象的方法：" + method2.toString());
         System.out.println("目标对象的接口：" + method.toString());
         System.out.println("这是jdk的代理方法");
         // 下面的代码，是反射中的API用法
@@ -61,11 +58,5 @@ public class JDKProxyFactory implements InvocationHandler {
         // 利用反射，调用[目标对象]的方法
         Object returnValue = method.invoke(target, args);
         return returnValue;
-    }
-
-    public static void main(String[] args) {
-        JDKProxyFactory proxyFactory = new JDKProxyFactory(new UserServiceImpl());
-        UserService proxy = (UserService) proxyFactory.getProxy();
-        proxy.saveUser();
     }
 }

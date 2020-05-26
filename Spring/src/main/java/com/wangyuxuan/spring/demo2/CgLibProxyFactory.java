@@ -1,7 +1,5 @@
 package com.wangyuxuan.spring.demo2;
 
-import com.wangyuxuan.spring.demo2.service.UserService;
-import com.wangyuxuan.spring.demo2.service.UserServiceImpl;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -43,11 +41,5 @@ public class CgLibProxyFactory implements MethodInterceptor {
         Object returnValue = methodProxy.invokeSuper(proxy, args);
         // 代理对象调用代理对象的invokeSuper方法，而invokeSuper方法会去调用目标类的 invoke方法完成目标对象的调用
         return returnValue;
-    }
-
-    public static void main(String[] args) {
-        CgLibProxyFactory proxyFactory = new CgLibProxyFactory();
-        UserService proxy = (UserService) proxyFactory.getProxyByCgLib(UserServiceImpl.class);
-        proxy.saveUser();
     }
 }
