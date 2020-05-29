@@ -13,6 +13,7 @@
         <module>mybatis-framework</module>
         <module>Spring</module>
         <module>spring-framework</module>
+        <module>SpringMVC</module>
     </modules>
 
 
