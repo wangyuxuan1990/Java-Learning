@@ -6,8 +6,16 @@
     <servlet-name>MyServlet</servlet-name>
     <servlet-class>com.wangyuxuan.servlet.MyServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DispatcherServlet</servlet-name>
+    <servlet-class>com.wangyuxuan.springmvc.servlet.DispatcherServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>MyServlet</servlet-name>
     <url-pattern>/MyServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 </web-app>
