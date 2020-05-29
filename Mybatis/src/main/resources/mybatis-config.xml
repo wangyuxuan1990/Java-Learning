@@ -4,7 +4,7 @@
 		<environment id="dev">
 			<!-- 配置数据源信息 -->
 			<dataSource type="DBCP">
-				<property name="password" value="123456"></property>
+				<property name="password" value="wangyuxuan"></property>
 				<property name="driver" value="com.mysql.jdbc.Driver"></property>
 				<property name="url"
 					value="jdbc:mysql://localhost:3306/mybatis"></property>

@@ -19,7 +19,7 @@
 		<property name="url"
 			value="jdbc:mysql://localhost:3306/mybatis"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="123456"></property>
+		<property name="password" value="wangyuxuan"></property>
 	</bean>
 
 </beans>
