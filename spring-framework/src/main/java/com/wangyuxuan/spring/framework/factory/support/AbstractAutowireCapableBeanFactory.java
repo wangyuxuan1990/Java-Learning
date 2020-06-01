@@ -1,5 +1,7 @@
 package com.wangyuxuan.spring.framework.factory.support;
 
+import com.wangyuxuan.spring.framework.aware.Aware;
+import com.wangyuxuan.spring.framework.aware.BeanFactoryAware;
 import com.wangyuxuan.spring.framework.ioc.BeanDefinition;
 import com.wangyuxuan.spring.framework.ioc.PropertyValue;
 import com.wangyuxuan.spring.framework.ioc.RuntimeBeanReference;
@@ -39,8 +41,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param bd
      */
     private void initializeBean(Object bean, BeanDefinition bd) {
-        // TODO 处理Aware接口（标记）
-
+        // 处理Aware接口（标记）
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+                // 当A类可以生产BeanFactory的实例
+                // C类需要BeanFactory的实例，但是A不会直接调用C类，所以说A无法直接给C注入一个BeanFactory
+            }
+        }
         // TODO 处理InitializingBean的初始化操作
 
         // 处理初始化方法

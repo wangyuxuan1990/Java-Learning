@@ -19,9 +19,13 @@ public class SimpleUrlHandlerMapping implements HandlerMapping {
      */
     private Map<String, Object> urlHandlers = new HashMap<>();
 
-    public SimpleUrlHandlerMapping() {
+    public void init() {
         urlHandlers.put("/saveUser", new SaveUserHandler());
     }
+
+//    public SimpleUrlHandlerMapping() {
+//        urlHandlers.put("/saveUser", new SaveUserHandler());
+//    }
 
     @Override
     public Object getHandler(HttpServletRequest request) throws Exception {

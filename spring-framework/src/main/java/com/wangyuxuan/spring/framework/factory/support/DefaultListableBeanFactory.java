@@ -4,6 +4,7 @@ import com.wangyuxuan.spring.framework.factory.ListableBeanFactory;
 import com.wangyuxuan.spring.framework.ioc.BeanDefinition;
 import com.wangyuxuan.spring.framework.registry.BeanDefinitionRegistry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +33,34 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public List<BeanDefinition> getBeanDefinitions() {
-        // TODO 先留着
-        return null;
+        List<BeanDefinition> beanDefinitionList = new ArrayList<>();
+        for (BeanDefinition beanDefinition : beanDefinitions.values()) {
+            beanDefinitionList.add(beanDefinition);
+        }
+        return beanDefinitionList;
     }
 
     @Override
-    public List<Object> getBeansByType(Class<?> clazz) {
-        // TODO 先留着
+    public <T> List<T> getBeansByType(Class<?> clazz) {
+        List<T> results = new ArrayList<>();
+        for (BeanDefinition bd : beanDefinitions.values()) {
+            String clazzName = bd.getClazzName();
+            Class<?> type = resolveClassName(clazzName);
+            if (clazz.isAssignableFrom(type)) {
+                Object bean = getBean(bd.getBeanName());
+                results.add((T) bean);
+            }
+        }
+        return results;
+    }
+
+    private Class<?> resolveClassName(String clazzName) {
+        try {
+            Class<?> type = Class.forName(clazzName);
+            return type;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

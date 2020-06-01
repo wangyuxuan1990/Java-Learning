@@ -15,7 +15,7 @@ public interface ListableBeanFactory extends BeanFactory {
      * @param clazz
      * @return
      */
-    List<Object> getBeansByType(Class<?> clazz);
+    <T> List<T> getBeansByType(Class<?> clazz);
 
     /**
      * 可以根据参数获取它和它子类型的实例名称，比如传递Object.class，则说明获取的是所有的实例对象的名称

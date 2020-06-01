@@ -1,10 +1,10 @@
 package com.wangyuxuan.springmvc.servlet;
 
-import com.wangyuxuan.springmvc.adapter.HttpRequestHandlerAdapter;
-import com.wangyuxuan.springmvc.adapter.SimpleControllerHandlerAdapter;
+import com.wangyuxuan.spring.framework.factory.support.DefaultListableBeanFactory;
+import com.wangyuxuan.spring.framework.reader.XmlBeanDefinitionReader;
+import com.wangyuxuan.spring.framework.resource.Resource;
+import com.wangyuxuan.spring.framework.resource.support.ClasspathResource;
 import com.wangyuxuan.springmvc.adapter.iface.HandlerAdapter;
-import com.wangyuxuan.springmvc.mapping.BeanNameUrlHandlerMapping;
-import com.wangyuxuan.springmvc.mapping.SimpleUrlHandlerMapping;
 import com.wangyuxuan.springmvc.mapping.iface.HandlerMapping;
 
 import javax.servlet.ServletConfig;
@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +26,47 @@ public class DispatcherServlet extends AbstractServlet {
     private List<HandlerMapping> handlerMappings = new ArrayList<>();
     private List<HandlerAdapter> handlerAdapters = new ArrayList<>();
 
+    private DefaultListableBeanFactory beanFactory;
+
+    /**
+     * 该方法只会在Servlet初始化的时候，被执行一次
+     *
+     * @param config
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
-        handlerMappings.add(new BeanNameUrlHandlerMapping());
-        handlerMappings.add(new SimpleUrlHandlerMapping());
-        handlerAdapters.add(new SimpleControllerHandlerAdapter());
-        handlerAdapters.add(new HttpRequestHandlerAdapter());
+        // 获取web.xml中的springmvc的配置文件地址
+        String configLocation = config.getInitParameter("contextConfigLocation");
+        // 创建BeanFactory
+        initSpringContainer(configLocation);
+        initStrategy();
+//        handlerMappings.add(new BeanNameUrlHandlerMapping());
+//        handlerMappings.add(new SimpleUrlHandlerMapping());
+//        handlerAdapters.add(new SimpleControllerHandlerAdapter());
+//        handlerAdapters.add(new HttpRequestHandlerAdapter());
+    }
+
+    private void initSpringContainer(String configLocation) {
+        // 加载SpringMVC配置文件，解析BeanDefinition
+        beanFactory = new DefaultListableBeanFactory();
+
+        Resource resource = new ClasspathResource(configLocation);
+        InputStream inputStream = resource.getResource();
+
+        XmlBeanDefinitionReader definitionReader = new XmlBeanDefinitionReader(beanFactory);
+        definitionReader.registerBeanDefinitions(inputStream);
+
+        // 初始化整个Spring容器中的所有单例bean
+        beanFactory.getBeansByType(Object.class);
+    }
+
+    private void initStrategy() {
+        if (beanFactory == null) {
+            return;
+        }
+        handlerMappings = beanFactory.getBeansByType(HandlerMapping.class);
+        handlerAdapters = beanFactory.getBeansByType(HandlerAdapter.class);
     }
 
     @Override

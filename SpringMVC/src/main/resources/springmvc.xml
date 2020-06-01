@@ -1,0 +1,11 @@
+<beans>
+    <!-- Handler 处理器的配置 -->
+    <bean name= "/queryUser" class="com.wangyuxuan.springmvc.handler.QueryUserHandler"></bean>
+    <bean name= "/saveUser" class="com.wangyuxuan.springmvc.handler.SaveUserHandler"></bean>
+    <!-- 处理器映射器的配置 -->
+    <bean class="com.wangyuxuan.springmvc.mapping.BeanNameUrlHandlerMapping" init-method="init"></bean>
+    <bean class="com.wangyuxuan.springmvc.mapping.SimpleUrlHandlerMapping" init-method="init"></bean>
+    <!-- 处理器适配器的配置 -->
+    <bean class="com.wangyuxuan.springmvc.adapter.HttpRequestHandlerAdapter"></bean>
+    <bean class="com.wangyuxuan.springmvc.adapter.SimpleControllerHandlerAdapter"></bean>
+</beans>
